@@ -3,29 +3,29 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 
 
 class UserManager(BaseUserManager):
-    """provides help functions for creating a user or creating a super user"""
-    def create_user(self, email, password=None, **extra_fields):
-        """Create and save new user"""
+    """create normal user and super user"""
+
+    def create_user(self, email, password=None, **extra_field):
+        """create user with email address"""
         if not email:
-            raise ValueError('User must have a email address')
-        user = self.model(email=self.normalize_email(email), **extra_fields)
+            raise ValueError("you must import valid email address.")
+        user = self.model(email=self.normalize_email(email), **extra_field)
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
     def create_superuser(self, email, password):
-        """Create and save new super user"""
+        """create super user with email address"""
         user = self.create_user(email, password)
-        user.is_staff = True
         user.is_superuser = True
+        user.is_staff = True
         user.save(using=self._db)
 
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """Custom user model that support using email instead of username"""
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)

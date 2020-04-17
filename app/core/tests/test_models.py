@@ -2,12 +2,12 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 
-class ModelTests(TestCase):
+class ModelTest(TestCase):
 
-    def test_create_user_with_email_successful(self):
-        """ Test creating a new user with an email is successful """
-        email = 'test@tehranappdevelop.com'
-        password = 'tehranapp123'
+    def test_create_user_with_email(self):
+        """create user with email address"""
+        email = "test@londonappdev.com"
+        password = "test1234"
         user = get_user_model().objects.create_user(
             email=email,
             password=password
@@ -15,24 +15,24 @@ class ModelTests(TestCase):
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
 
-    def test_new_user_email_normalized(self):
-        """Test email for a new user is normalized"""
-        email = 'test@LONDONHAPPY.COM'
-        user = get_user_model().objects.create_user(email, "test123")
-
+    def test_create_user_email_case_sence(self):
+        """case sence for email address"""
+        email = "test@LONDONAPPDEV.com"
+        user = get_user_model().objects.create_user(
+            email=email
+        )
         self.assertEqual(user.email, email.lower())
 
-    def test_new_user_invalid_email(self):
-        """Test creating user with no email raises error"""
+    def test_invalid_email_address(self):
+        """raises from invalid email addresss"""
         with self.assertRaises(ValueError):
-            get_user_model().objects.create_user(None, "test123")
+            get_user_model().objects.create_user(None, "test1234")
 
-    def test_create_new_superuser(self):
-        """Test creating a new super user"""
+    def test_create_super_user(self):
+        """create super user with email address"""
         user = get_user_model().objects.create_superuser(
-            "test@londonapp.com",
-            "test123"
+            "test@londonappdev.com",
+            "test1234"
         )
-
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
